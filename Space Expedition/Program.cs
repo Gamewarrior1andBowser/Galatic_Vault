@@ -55,6 +55,50 @@ namespace Space_Expedition
             Console.WriteLine("Shutting down...");
         }
 
+        static Artifact[] LoadVault() {
+            int count = 1;
+            string data = ReadAllText("C:\\TempData\\Galatic_Vault.txt");
+            for (int i = 0; i < data.Length; i++) {
+                if (data[i].ToString() == ",") {
+                    count += 1;
+                }
+            }
+            Artifact[] output = new Artifact[count];
+            count = 0;
+            int index = 0;
+            for (int j = 0; j < output.Length; j++) {
+                string[] temp = new string[4];
+                string word = "";
+                int tempCount = 0;
+                for (int i = index; i < data.Length; i++) {
+                    if (data[i].ToString() == ",") {
+                        i = data.Length - 1;
+                    } else {
+                        if (data[i].ToString() == " ") {
+                            if (data[i + 1].ToString() == "|") {
+                                temp[tempCount] = word;
+                                word = "";
+                                tempCount += 1;
+                                i += 2;
+                            } else {
+                                word = word + data[i].ToString();
+                            }
+                        } else {
+                            word = word + data[i].ToString();
+                        }
+                        if (i + 1 == data.Length) {
+                            temp[tempCount] = word;
+                        } else if (data[i + 1].ToString() == ",") {
+                            temp[tempCount] = word;
+                            index = i + 3;
+                        }
+                    }
+                }
+                output[count] = new Artifact(temp[0], temp[1], temp[2], temp[3]);
+                count += 1;
+            }
+            return output;
+        }
 
         static void Continue() {
             Console.WriteLine("");
