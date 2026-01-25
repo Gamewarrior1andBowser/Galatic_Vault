@@ -43,7 +43,7 @@ namespace Space_Expedition
                     Console.Clear();
                 }
                 if (userInput == "1") {
-                    //Add To Vault;
+                    AddToVault();
                 } else if (userInput == "2") {
                     //View items in Vault;
                 } else if (userInput == "3") {
@@ -53,6 +53,66 @@ namespace Space_Expedition
             Console.WriteLine("");
             Console.WriteLine("Have a good rest of your day!");
             Console.WriteLine("Shutting down...");
+        }
+
+        static void AddToVault() {
+            string userInput = "";
+            string name = "";
+            string location = "";
+            string year = "";
+            string log = "";
+            while (userInput != "Y") {
+                Console.Clear();
+                Console.Write("What's the name of Artifact: ");
+                name = Console.ReadLine().ToString();
+                Console.Write($"Where was the {name} found: ");
+                location = Console.ReadLine().ToString();
+                Console.Write($"What year was {name} found in {location} (use format YYYY): ");
+                year = Console.ReadLine().ToString();
+                Console.WriteLine();
+                Console.Write($"So {name} was found in {location} on {year}? (Y/N): ");
+                userInput = Console.ReadKey().KeyChar.ToString().ToUpper();
+            }
+            Console.WriteLine("");
+            while (userInput != "1" && userInput != "2") {
+                Console.Clear();
+                Console.WriteLine($"1: Use the following prompt as the Journey Log for this artifact -> ({name} was found in {location} on {year})");
+                Console.WriteLine("2: Write your own Journey Log for this artifact");
+                Console.Write($"Please choose a number for an option from above: ");
+                userInput = Console.ReadKey().KeyChar.ToString().ToUpper();
+            }
+            if (userInput == "2") {
+                Console.Clear();
+                Console.WriteLine($"Reference: (name: {name}, location: {location}, year: {year})");
+                Console.WriteLine($"Use the reference above when writing, hit the Enter key when you're done!");
+                Console.WriteLine($"");
+                log = Console.ReadLine();
+            }
+            Console.WriteLine("");
+
+
+            //put a UpdateData(name, location, year, log) method call here once UpdateData() is made;
+            Console.WriteLine("");
+            Console.WriteLine("Artifact data has been saved to: \"C:\\TempData\\Galatic_Vault.txt\"");
+
+            Continue();
+        }
+
+        static void ViewLogs() {
+
+        }
+
+        static void ViewVault() {
+            Console.WriteLine("All registered Artifacts in the Vault:");
+            Artifact[] data = LoadVault();
+            Console.WriteLine("");
+            for (int i = 1; i < data.Length + 1; i++) {
+                data[i - 1].Decode();
+                Console.WriteLine($"{i}: {data[i - 1].Print()}");
+                Console.WriteLine("");
+            }
+            Console.WriteLine("");
+            Continue();
         }
 
         static Artifact[] LoadVault() {
