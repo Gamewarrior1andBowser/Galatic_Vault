@@ -1,4 +1,6 @@
-﻿namespace Space_Expedition {
+﻿using System.Net.Security;
+
+namespace Space_Expedition {
     internal class Artifact {
 
         readonly char[] OriginalArray = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -14,31 +16,67 @@
         public bool IsEncoded { get; set; }
 
         public Artifact(string name, string artist, string year, string log, bool isEncoded) {
-            EncodedName = name;
             Artist = artist;
             Year = year;
             Log = log;
 
             if (isEncoded == true) {
                 IsEncoded = isEncoded;
+                EncodedName = name;
+
             } else {
-                Encode();
+                EncodedName = Encode(name);
+                IsEncoded = true;
             }
         }
 
-        private void Encode() {
-
+        private string Encode(string name) {
+            if (IsEncoded == true) {
+                return name;
+            } else {
+                //Assign a random number between 1 and 3 to the letter, and encode it appropriatlly.
+                return Encode(name);
+            }
         }
 
-        public void Decode() {
+        public string Decode(string name) {
             if (IsEncoded == false || Name.Length == EncodedName.Length / 2) {
                 IsEncoded = false;
+                return name;
             } else {
+                int nameIndex = 0;
+                int charIndex = 0;
+                for (int i = 0; i < name.Length; i++) {
+                    if (name[i].ToString() == "1" || name[i].ToString() == "2" || name[i].ToString() == "3") {
+                        nameIndex = i;
+                        i = name.Length;
+                    }
+                }
+                for (int i = 0; i < OriginalArray.Length; i++) {
+                    if (OriginalArray[i] == name[nameIndex - 1]) {
+                        charIndex = i;
+                        i = OriginalArray.Length;
+                    }
+                }
 
+                string start = name.Substring(0, nameIndex - 1);
+                string insert = "";
+                string end = name.Substring(nameIndex + 1, name.Length);
+                if (name[nameIndex].ToString() == "3" || name[nameIndex].ToString() == "3") {
+                    insert = MappedArray[charIndex].ToString() + (name[nameIndex] - 1).ToString();
+                } else {
+                    insert = ReversedArray[charIndex].ToString() + " ";
+                }
+                name = start + insert + end;
+                return Decode(name);
             }
         }
 
         public string Print() {
+            if (IsEncoded == true) {
+                Decode(EncodedName);
+                IsEncoded = false;
+            }
             return $"{Name}, {Artist}, {Year}, {Log}";
         }
 

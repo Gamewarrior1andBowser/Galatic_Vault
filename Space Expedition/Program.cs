@@ -107,7 +107,6 @@ namespace Space_Expedition
             Artifact[] data = LoadVault();
             Console.WriteLine("");
             for (int i = 1; i < data.Length + 1; i++) {
-                data[i - 1].Decode();
                 Console.WriteLine($"{i}: {data[i - 1].Print()}");
                 Console.WriteLine("");
             }
