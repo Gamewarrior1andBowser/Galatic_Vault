@@ -116,7 +116,7 @@ namespace Space_Expedition
         }
 
         static void UpdateData(string name, string location, string year, string log) {
-            Artifact temp = new Artifact(name, location, year, log);
+            Artifact temp = new Artifact(name, location, year, log, false);
             Artifact[] artifactData = LoadVault();
             Artifact[] artifactOutput = new Artifact[artifactData.Length + 1];
             int dataIndex = 0;
@@ -187,7 +187,7 @@ namespace Space_Expedition
                         }
                     }
                 }
-                output[count] = new Artifact(temp[0], temp[1], temp[2], temp[3]);
+                output[count] = new Artifact(temp[0], temp[1], temp[2], temp[3], true);
                 count += 1;
             }
             return output;

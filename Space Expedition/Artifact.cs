@@ -1,4 +1,6 @@
-﻿namespace Space_Expedition {
+﻿using System.Net.Security;
+
+namespace Space_Expedition {
     internal class Artifact {
         public string Name { get; set; }
         public string EncodedName { get; }
@@ -8,11 +10,21 @@
 
         public bool IsEncoded { get; set; }
 
-        public Artifact(string name, string artist, string year, string log) {
+        public Artifact(string name, string artist, string year, string log, bool isEncoded) {
             EncodedName = name;
             Artist = artist;
             Year = year;
             Log = log;
+
+            if (isEncoded == true) {
+                IsEncoded = isEncoded;
+            } else {
+                Encode();
+            }
+        }
+
+        private void Encode() {
+
         }
 
         public void Decode() {
