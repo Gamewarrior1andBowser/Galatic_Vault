@@ -25,18 +25,32 @@ namespace Space_Expedition {
                 EncodedName = name;
 
             } else {
-                EncodedName = Encode(name);
+                string newName = "";
+                for (int i = 0; i < name.Length; i++) {
+                    newName = newName + Encode(name[i].ToString(), new Random().Next(1, 4));
+                }
+                EncodedName = newName;
                 IsEncoded = true;
             }
         }
 
-        private string Encode(string name) {
-            if (IsEncoded == true) {
-                return name;
-            } else {
-                //Assign a random number between 1 and 3 to the letter, and encode it appropriatlly.
-                return Encode(name);
+        private string Encode(string letter, int level) {
+            int charIndex = 0;
+            for (int encodingLevel = 0; encodingLevel > level; encodingLevel++) {
+                for (int i = 0; i < OriginalArray.Length; i++) {
+                    if (OriginalArray[i].ToString() == letter) {
+                        charIndex = i;
+                        i = OriginalArray.Length;
+                    }
+                }
+                if (encodingLevel == 0) {
+                    letter = ReversedArray[charIndex].ToString() + level.ToString();
+                } else {
+                    letter = MappedArray[charIndex].ToString() + level.ToString();
+                }
             }
+
+            return letter;
         }
 
         public string Decode(string name) {
