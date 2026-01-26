@@ -45,7 +45,7 @@ namespace Space_Expedition
                 if (userInput == "1") {
                     AddToVault();
                 } else if (userInput == "2") {
-                    //View items in Vault;
+                    ViewVault();
                 } else if (userInput == "3") {
                     //View Logs in Vault;
                 }
@@ -91,7 +91,7 @@ namespace Space_Expedition
             Console.WriteLine("");
 
 
-            //put a UpdateData(name, location, year, log) method call here once UpdateData() is made;
+            UpdateData(name, location, year, log);
             Console.WriteLine("");
             Console.WriteLine("Artifact data has been saved to: \"C:\\TempData\\Galatic_Vault.txt\"");
 
@@ -113,6 +113,39 @@ namespace Space_Expedition
             }
             Console.WriteLine("");
             Continue();
+        }
+
+        static void UpdateData(string name, string location, string year, string log) {
+            Artifact temp = new Artifact(name, location, year, log);
+            Artifact[] artifactData = LoadVault();
+            Artifact[] artifactOutput = new Artifact[artifactData.Length + 1];
+            int dataIndex = 0;
+            bool addedNewData = false;
+            for (int i = 0; i < artifactOutput.Length; i++) {
+                if (i < artifactData.Length && addedNewData == false) {
+                    if (int.Parse(artifactData[i].Year) > int.Parse(temp.Year)) {
+                        addedNewData = true;
+                        artifactOutput[i] = temp;
+                    } else {
+                        artifactOutput[i] = artifactData[dataIndex];
+                        dataIndex += 1;
+                    }
+                } else if (i == artifactData.Length && addedNewData == false) {
+                    addedNewData = true;
+                    artifactOutput[i] = temp;
+                } else {
+                    artifactOutput[i] = artifactData[dataIndex];
+                    dataIndex += 1;
+                }
+            }
+            string artifactFile = "";
+            for (int i = 0; i < artifactOutput.Length; i++) {
+                artifactFile += artifactOutput[i].Save();
+                if (i != artifactOutput.Length - 1) {
+                    artifactFile += ", ";
+                }
+            }
+            WriteAllText("C:\\TempData\\Galatic_Vault.txt", artifactFile);
         }
 
         static Artifact[] LoadVault() {
