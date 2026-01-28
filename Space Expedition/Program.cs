@@ -30,24 +30,21 @@ namespace Space_Expedition
 
         static void MainMenu() {
             string userInput = "";
-            while (userInput != "4") {
+            while (userInput != "3") {
                 Console.WriteLine("Welcome to the Space Expedition tracker!");
                 Console.WriteLine("");
                 Console.WriteLine("1: Add an Artifact and Journey Log to the Galatic Vault");
-                Console.WriteLine("2: View all Artifacts in the Galatic Vault");
-                Console.WriteLine("3: View all Journey Logs in the Galatic Vault");
-                Console.WriteLine("4: Exit the tracker");
+                Console.WriteLine("2: View all Artifacts and Journey Logs in the Galatic Vault");
+                Console.WriteLine("3: Exit the tracker");
                 Console.Write("Please choose a number for any of the options from above: ");
                 userInput = Console.ReadKey().KeyChar.ToString();
-                if (userInput != "4") {
+                if (userInput != "3") {
                     Console.Clear();
                 }
                 if (userInput == "1") {
                     AddToVault();
                 } else if (userInput == "2") {
                     ViewVault();
-                } else if (userInput == "3") {
-                    //View Logs in Vault;
                 }
             }
             Console.WriteLine("");
@@ -76,7 +73,7 @@ namespace Space_Expedition
             Console.WriteLine("");
             while (userInput != "1" && userInput != "2") {
                 Console.Clear();
-                Console.WriteLine($"1: Use the following prompt as the Journey Log for this artifact -> ({name} was found in {location} on {year})");
+                Console.WriteLine($"1: Use the following prompt as the Journey Log for this artifact -> \"{name} was found in {location} on {year}\"");
                 Console.WriteLine("2: Write your own Journey Log for this artifact");
                 Console.Write($"Please choose a number for an option from above: ");
                 userInput = Console.ReadKey().KeyChar.ToString().ToUpper();
@@ -86,20 +83,18 @@ namespace Space_Expedition
                 Console.WriteLine($"Reference: (name: {name}, location: {location}, year: {year})");
                 Console.WriteLine($"Use the reference above when writing, hit the Enter key when you're done!");
                 Console.WriteLine($"");
-                log = Console.ReadLine();
+                log = "\"" + Console.ReadLine() + "\"";
+            } else {
+                log = $"\"{name} was found in {location} on {year}\"";
             }
-            Console.WriteLine("");
+                Console.WriteLine("");
 
 
-            UpdateData(name, location, year, log);
+            UpdateData(name.ToUpper(), location, year, log);
             Console.WriteLine("");
             Console.WriteLine("Artifact data has been saved to: \"C:\\TempData\\Galatic_Vault.txt\"");
 
             Continue();
-        }
-
-        static void ViewLogs() {
-
         }
 
         static void ViewVault() {
@@ -149,10 +144,17 @@ namespace Space_Expedition
 
         static Artifact[] LoadVault() {
             int count = 1;
+            bool inQuote = false;
             string data = ReadAllText("C:\\TempData\\Galatic_Vault.txt");
             for (int i = 0; i < data.Length; i++) {
-                if (data[i].ToString() == ",") {
+                if (data[i].ToString() == "," && !inQuote) {
                     count += 1;
+                } else if (data[i].ToString() == "\"") {
+                    if (inQuote) {
+                        inQuote = false;
+                    } else {
+                        inQuote = true;
+                    }
                 }
             }
             Artifact[] output = new Artifact[count];
@@ -163,11 +165,18 @@ namespace Space_Expedition
                 string word = "";
                 int tempCount = 0;
                 for (int i = index; i < data.Length; i++) {
-                    if (data[i].ToString() == ",") {
+                    if (data[i].ToString() == "\"") {
+                        if (inQuote) {
+                            inQuote = false;
+                        } else {
+                            inQuote = true;
+                        }
+                    }
+                    if (data[i].ToString() == "," && !inQuote) {
                         i = data.Length - 1;
                     } else {
                         if (data[i].ToString() == " ") {
-                            if (data[i + 1].ToString() == "|") {
+                            if (data[i + 1].ToString() == "|" && !inQuote) {
                                 temp[tempCount] = word;
                                 word = "";
                                 tempCount += 1;
@@ -180,7 +189,7 @@ namespace Space_Expedition
                         }
                         if (i + 1 == data.Length) {
                             temp[tempCount] = word;
-                        } else if (data[i + 1].ToString() == ",") {
+                        } else if (data[i + 1].ToString() == "," && !inQuote) {
                             temp[tempCount] = word;
                             index = i + 3;
                         }
