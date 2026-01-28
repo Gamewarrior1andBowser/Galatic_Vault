@@ -15,10 +15,10 @@ namespace Space_Expedition
                 Console.WriteLine("New Data has been created in: \"C:\\TempData\\Galatic_Vault.txt\"");
                 Continue();
                 try {
-                    WriteAllText("C:\\TempData\\Galatic_Vault.txt", "Hopeium | Meme World | 2021 | A rainbow colored crystal filled with immense power, it only appears when all hope seems lost.");
+                    WriteAllText("C:\\TempData\\Galatic_Vault.txt", "Z1X3W2 | Nebulon-Vii | 1984 | \"A translucent orb that pulsates with a soft blue light, Exhibits a gravitational anomaly when exposed to ultraviolet radiation.\"");
                 } catch (System.IO.IOException) {
                     Console.WriteLine("Error, failed to preset file.");
-                    Console.WriteLine("Please open \"C:\\TempData\\Galatic_Vault.txt\" and paste \"Hopeium | Meme World | 2021 | A rainbow colored crystal filled with immense power, it only appears when all hope seems lost.\" into the text file after you close the application.");
+                    Console.WriteLine("Please open \"C:\\TempData\\Galatic_Vault.txt\" and paste (Z1X3W2 | Nebulon-Vii | 1984 | \"A translucent orb that pulsates with a soft blue light, Exhibits a gravitational anomaly when exposed to ultraviolet radiation.\") into the text file after you close the application.");
                     Console.WriteLine("");
                     Console.WriteLine("Then reboot the Space Expedition tracker!");
                     Console.WriteLine("");
